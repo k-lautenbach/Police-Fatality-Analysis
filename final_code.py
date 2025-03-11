@@ -68,15 +68,25 @@ def col_count(col):
     '''
 
     col_counts = {}
-
     for item in col:
         count = item
         if count in col_counts:
             col_counts[count] += 1
         else:
             col_counts[count] = 1
-
     return col_counts
+
+def city_100(dict):
+    ''' returns a list of cities with fatalities over 100 '''
+    above_100 = []
+    ny_vals = []
+    for key, value in dict.items():
+        if key in ("Brooklyn", "Manhattan", "Staten Island", "Bronx", "Queens"):
+            ny_vals.append(value)
+        if value > 100:
+            above_100.append([value, key])
+    above_100.append([sum(ny_vals), 'New York City'])
+    return above_100
 
 def int_list(lst):
     '''
@@ -334,21 +344,23 @@ def main():
     plot_victims_race(fatal_data, 'Race')
     plot_victims_gender(fatal_data, 'Gender')
 
-
-    # KATE'S CODE
     # PLOT locations
     # clean code for both lat and long
     find_lat = get_column(fatal_data, 'Latitude')
     find_long = get_column(fatal_data, 'Longitude')
+
     # call plot function
-    #print (find_lat)
     plot_locations(find_long, find_lat)
+    find_city = get_column(fatal_data, 'death_city')
+    city_count = col_count(find_city)
+    top_cities = city_100(city_count)
+    top_cities.sort()
+    print(top_cities)
 
     # PLOT number of fatalities by year
     find_year = get_column(fatal_data, 'month/day/year')
     year_count = col_count(find_year)
+    print(year_count)
     plot_years(year_count)
-
-
 
 main()
